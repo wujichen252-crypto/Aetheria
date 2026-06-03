@@ -21,6 +21,9 @@ export class GameScene extends Phaser.Scene {
     // 创建地图
     this.createMap()
     
+    // 创建昼夜循环
+    this.dayNightCycle = new DayNightCycle(this)
+    
     // 创建玩家
     this.player = new Player(this, 400, 300)
     
@@ -98,6 +101,7 @@ export class GameScene extends Phaser.Scene {
 
   update(): void {
     this.player?.update()
+    this.dayNightCycle?.update(this.game.loop.delta)
     
     // 检查交互
     if (this.player.getInteractKey().isDown) {
