@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import { GAME_CONFIG } from '../config'
 import { GameStateManager } from '../systems/GameState'
-import { ISLAND_DEFINITIONS, getIslandDefinition } from '../world/IslandData'
+import { getAllIslandIds, getIslandDefinition } from '../world/IslandData'
 import { RecipeSystem } from '../systems/RecipeSystem'
 
 export class ExplorationJournalUI {
@@ -108,7 +108,7 @@ export class ExplorationJournalUI {
   }
 
   private renderIslands(gsm: GameStateManager, y: number): void {
-    Object.keys(ISLAND_DEFINITIONS).forEach(id => {
+    getAllIslandIds().forEach(id => {
       const island = getIslandDefinition(id)
       const discovered = gsm.data.discoveredIslands.includes(id)
       const status = discovered ? '✓' : '?'

@@ -9,6 +9,8 @@ export interface SaveSlot {
   currentIsland: string
   discoveredIslands: string[]
   discoveredPois: string[]
+  unlockedRoutes: string[]
+  completedDangerLevels: number[]
   airshipFuel: number
   maxHp: number
   maxStamina: number

@@ -1,4 +1,7 @@
 import Phaser from 'phaser'
+import { GameStateManager } from '../systems/GameState'
+import { RouteGraph } from '../systems/RouteGraph'
+import { SaveManager } from '../systems/SaveManager'
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -10,7 +13,32 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.initializeGameState()
     this.scene.start('GameScene', { islandId: 'starter_forest' })
+  }
+
+  private initializeGameState(): void {
+    const gsm = GameStateManager.getInstance()
+    const routeGraph = RouteGraph.getInstance()
+
+    // 尝试加载存档
+    const savedGame = SaveManager.loadSlot(0)
+    if (savedGame) {
+      gsm.fromSaveData(savedGame)
+    } else {
+      // 新游戏，解锁起始岛屿的航线
+      this.unlockStartingRoutes(gsm, routeGraph)
+    }
+  }
+
+  private unlockStartingRoutes(gsm: GameStateManager, routeGraph: RouteGraph): void {
+    // 解锁起始森林的所有航线
+    const startingRoutes = routeGraph.getRoutesFrom('starter_forest')
+    startingRoutes.forEach(route => {
+      if (route.unlockConditions.length === 0) {
+        gsm.unlockRoute(route.id)
+      }
+    })
   }
 
   private createPlaceholderGraphics(): void {

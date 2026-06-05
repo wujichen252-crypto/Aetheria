@@ -1,0 +1,34 @@
+{
+  "id": "crystal_cave",
+  "name": "水晶洞穴",
+  "description": "巨大的水晶从洞穴顶端垂下，散发着柔和的七彩光芒。",
+  "type": "mineral_vein",
+  "mapWidth": 1024,
+  "mapHeight": 768,
+  "groundColor": { "fill": 2756634, "stroke": 1747608, "strokeAlpha": 0.3 },
+  "skyColor": 67049,
+  "spawnPoint": { "x": 300, "y": 200 },
+  "airshipLanding": { "x": 700, "y": 600 },
+  "connections": ["ancient_ruins"],
+  "resources": [
+    { "type": "rock", "positions": [
+      { "x": 250, "y": 250 }, { "x": 500, "y": 200 }, { "x": 650, "y": 300 },
+      { "x": 350, "y": 400 }, { "x": 600, "y": 500 }, { "x": 400, "y": 600 }
+    ]},
+    { "type": "iron_ore", "positions": [
+      { "x": 400, "y": 250 }, { "x": 600, "y": 350 }, { "x": 350, "y": 550 }
+    ]},
+    { "type": "tree", "positions": [
+      { "x": 500, "y": 400 }, { "x": 300, "y": 350 }, { "x": 650, "y": 450 }
+    ]}
+  ],
+  "pois": [
+    { "id": "crystal_heart", "name": "水晶之心", "description": "一颗巨大无比的紫色水晶，脉动着古老的能量。", "x": 500, "y": 250, "type": "shrine" },
+    { "id": "crystal_pool", "name": "荧光水池", "description": "水面上漂浮着发光的晶体碎片，映出梦幻的色彩。", "x": 350, "y": 500, "type": "landmark" }
+  ],
+  "creatures": [
+    { "type": "forest_spider", "positions": [{ "x": 600, "y": 250 }, { "x": 400, "y": 450 }] }
+  ],
+  "dangerLevel": 3,
+  "weatherBias": "foggy"
+}

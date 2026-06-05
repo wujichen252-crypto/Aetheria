@@ -8,7 +8,7 @@ import { Hud } from '../ui/Hud'
 import { InventoryUI } from '../ui/InventoryUI'
 import { DayNightCycle } from '../systems/DayNightCycle'
 import { GameStateManager } from '../systems/GameState'
-import { getIslandDefinition, ISLAND_DEFINITIONS, IslandDefinition } from '../world/IslandData'
+import { getIslandDefinition, registerIsland, IslandDefinition } from '../world/IslandData'
 import { Airship } from '../entities/Airship'
 import { AirshipMenu } from '../ui/AirshipMenu'
 import { CraftingUI } from '../ui/CraftingUI'
@@ -29,6 +29,8 @@ import { SaveManager } from '../systems/SaveManager'
 import { generateProceduralIsland } from '../systems/ProceduralIslandGen'
 import { IslandType } from '../world/IslandData'
 import { HelpUI } from '../ui/HelpUI'
+import { TileMapRenderer } from '../systems/TileMapRenderer'
+import { RouteGraph } from '../systems/RouteGraph'
 
 export class GameScene extends Phaser.Scene {
   private player!: Player
@@ -60,6 +62,7 @@ export class GameScene extends Phaser.Scene {
   private stormTimer: number = 0
   private prevEKeyDown: boolean = false
   private helpUI!: HelpUI
+  private tileMapRenderer!: TileMapRenderer
 
   constructor() {
     super({ key: 'GameScene' })
@@ -67,16 +70,27 @@ export class GameScene extends Phaser.Scene {
 
   create(data: { islandId?: string }): void {
     const gsm = GameStateManager.getInstance()
+    const routeGraph = RouteGraph.getInstance()
 
     const islandId = data?.islandId || gsm.data.currentIsland
     this.islandDef = getIslandDefinition(islandId)
     gsm.discoverIsland(islandId)
 
+    // 记录完成的危险等级
+    this.completeDangerLevelForIsland(islandId)
+
+    // 检查并解锁满足条件的航线
+    const newlyUnlockedRoutes = routeGraph.checkAndUnlockRoutes()
+    if (newlyUnlockedRoutes.length > 0) {
+      this.showNewRoutesUnlocked(newlyUnlockedRoutes)
+    }
+
     this.resources = []
     this.creatures = []
 
-    // 地形
-    this.createMap(this.islandDef)
+    // 地形（TileMap 渲染）
+    this.tileMapRenderer = new TileMapRenderer(this)
+    this.tileMapRenderer.render(this.islandDef)
 
     // 昼夜
     this.dayNightCycle = new DayNightCycle(this)
@@ -140,6 +154,7 @@ export class GameScene extends Phaser.Scene {
     this.craftingUI = new CraftingUI(this, this.player.inventory, () => {
       this.inventoryUI.updateDisplay()
       this.hud.updateStats(this.player.hp, this.player.stamina, this.player.hunger)
+      this.checkRoutesAfterItemChange()
     })
     this.mapUI = new MapUI(this, this.fogOfWar, this.islandDef.mapWidth, this.islandDef.mapHeight, this.islandDef.pois)
     this.journalUI = new ExplorationJournalUI(this)
@@ -180,6 +195,63 @@ export class GameScene extends Phaser.Scene {
     })
 
     this.showIslandName(this.islandDef.name)
+  }
+
+  /**
+   * 记录完成的危险等级
+   */
+  private completeDangerLevelForIsland(islandId: string): void {
+    const gsm = GameStateManager.getInstance()
+    const dangerLevel = this.getIslandDangerLevel(islandId)
+    gsm.completeDangerLevel(dangerLevel)
+  }
+
+  /**
+   * 获取岛屿危险等级
+   */
+  private getIslandDangerLevel(islandId: string): number {
+    const dangerMap: Record<string, number> = {
+      'starter_forest': 1,
+      'mineral_ridge': 2,
+      'ancient_ruins': 2,
+      'forge_island': 3,
+      'storm_peak': 4,
+      'crystal_cave': 3,
+      'void_fragment': 4,
+      'sky_garden': 1,
+      'world_tree': 3,
+    }
+    return dangerMap[islandId] ?? 1
+  }
+
+  /**
+   * 物品变化后检查航线解锁
+   */
+  private checkRoutesAfterItemChange(): void {
+    const routeGraph = RouteGraph.getInstance()
+    const newlyUnlockedRoutes = routeGraph.checkAndUnlockRoutes()
+    if (newlyUnlockedRoutes.length > 0) {
+      this.showNewRoutesUnlocked(newlyUnlockedRoutes)
+    }
+  }
+
+  /**
+   * 显示新航线解锁提示
+   */
+  private showNewRoutesUnlocked(_routeIds: string[]): void {
+    const text = this.add.text(
+      GAME_CONFIG.width / 2,
+      GAME_CONFIG.height / 2 - 100,
+      '发现新航线！',
+      { fontSize: '28px', color: '#d4a373', fontStyle: 'bold' }
+    )
+    text.setOrigin(0.5)
+    text.setScrollFactor(0)
+    text.setDepth(300)
+    this.tweens.add({
+      targets: text, alpha: 0, delay: 2000, duration: 1000,
+      onComplete: () => text.destroy(),
+    })
   }
 
   update(): void {
@@ -345,21 +417,6 @@ export class GameScene extends Phaser.Scene {
       targets: text, alpha: 0, y: text.y - 30, duration: 2000, delay: 500, ease: 'Power2',
       onComplete: () => text.destroy(),
     })
-  }
-
-  private createMap(island: IslandDefinition): void {
-    const gfx = this.add.graphics()
-    gfx.fillStyle(island.groundColor.fill)
-    gfx.fillRect(0, 0, island.mapWidth, island.mapHeight)
-    gfx.lineStyle(1, island.groundColor.stroke, island.groundColor.strokeAlpha)
-    for (let x = 0; x < island.mapWidth; x += GAME_CONFIG.tileSize) {
-      gfx.moveTo(x, 0); gfx.lineTo(x, island.mapHeight)
-    }
-    for (let y = 0; y < island.mapHeight; y += GAME_CONFIG.tileSize) {
-      gfx.moveTo(0, y); gfx.lineTo(island.mapWidth, y)
-    }
-    gfx.strokePath()
-    gfx.setDepth(-1)
   }
 
   private createResources(island: IslandDefinition): void {
@@ -626,7 +683,7 @@ export class GameScene extends Phaser.Scene {
     if (islandId.startsWith('procedural_')) {
       const seed = parseInt(islandId.replace('procedural_', ''), 10)
       const procDef = generateProceduralIsland(seed)
-      ISLAND_DEFINITIONS[islandId] = procDef
+      registerIsland(procDef)
     }
 
     this.scene.start('LoadingScene', { toIsland: islandId })

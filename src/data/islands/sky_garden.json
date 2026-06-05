@@ -1,0 +1,39 @@
+{
+  "id": "sky_garden",
+  "name": "天空花园",
+  "description": "漂浮在云海之上的梦幻花园，奇异的植物在这里繁茂生长。",
+  "type": "forest",
+  "mapWidth": 1280,
+  "mapHeight": 960,
+  "groundColor": { "fill": 4777898, "stroke": 3565146, "strokeAlpha": 0.3 },
+  "skyColor": 67049,
+  "spawnPoint": { "x": 400, "y": 300 },
+  "airshipLanding": { "x": 900, "y": 700 },
+  "connections": ["starter_forest", "world_tree"],
+  "resources": [
+    { "type": "tree", "positions": [
+      { "x": 300, "y": 200 }, { "x": 600, "y": 180 }, { "x": 800, "y": 250 },
+      { "x": 400, "y": 350 }, { "x": 700, "y": 400 }, { "x": 250, "y": 500 },
+      { "x": 550, "y": 550 }, { "x": 850, "y": 450 }, { "x": 350, "y": 650 },
+      { "x": 650, "y": 700 }, { "x": 500, "y": 800 }
+    ]},
+    { "type": "berry_bush", "positions": [
+      { "x": 500, "y": 250 }, { "x": 300, "y": 400 }, { "x": 700, "y": 500 },
+      { "x": 450, "y": 600 }, { "x": 600, "y": 750 }
+    ]},
+    { "type": "rock", "positions": [
+      { "x": 500, "y": 300 }, { "x": 350, "y": 450 }, { "x": 750, "y": 350 }
+    ]}
+  ],
+  "pois": [
+    { "id": "garden_fountain", "name": "生命之泉", "description": "清澈的泉水从雕花石像中涌出，蕴含着勃勃生机。", "x": 600, "y": 350, "type": "shrine" },
+    { "id": "garden_arbor", "name": "花藤长廊", "description": "古老的石质拱门上爬满了发光的藤蔓植物。", "x": 350, "y": 550, "type": "landmark" }
+  ],
+  "creatures": [
+    { "type": "forest_rabbit", "positions": [{ "x": 500, "y": 200 }, { "x": 700, "y": 600 }, { "x": 300, "y": 700 }] },
+    { "type": "forest_spider", "positions": [{ "x": 800, "y": 500 }] }
+  ],
+  "merchant": { "x": 700, "y": 300 },
+  "dangerLevel": 1,
+  "weatherBias": "sunny"
+}

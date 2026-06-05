@@ -1,0 +1,30 @@
+{
+  "id": "storm_peak",
+  "name": "风暴之巅",
+  "description": "狂风呼啸，雷电不断击打在山巅之上。只有最勇敢的探险者才敢踏足。",
+  "type": "storm",
+  "mapWidth": 1024,
+  "mapHeight": 768,
+  "groundColor": { "fill": 3806266, "stroke": 2757658, "strokeAlpha": 0.5 },
+  "skyColor": 10451,
+  "spawnPoint": { "x": 300, "y": 200 },
+  "airshipLanding": { "x": 500, "y": 650 },
+  "connections": ["mineral_ridge"],
+  "resources": [
+    { "type": "rock", "positions": [
+      { "x": 300, "y": 250 }, { "x": 600, "y": 200 }, { "x": 450, "y": 350 },
+      { "x": 700, "y": 400 }, { "x": 350, "y": 500 }, { "x": 550, "y": 550 }
+    ]},
+    { "type": "iron_ore", "positions": [
+      { "x": 500, "y": 300 }, { "x": 650, "y": 350 }, { "x": 400, "y": 500 }
+    ]}
+  ],
+  "pois": [
+    { "id": "storm_pinnacle", "name": "雷击之巅", "description": "山顶的岩石被雷电劈成奇异的形状，空气中弥漫着臭氧的味道。", "x": 600, "y": 200, "type": "landmark" }
+  ],
+  "creatures": [
+    { "type": "ridge_wolf", "positions": [{ "x": 450, "y": 300 }, { "x": 550, "y": 500 }] }
+  ],
+  "dangerLevel": 4,
+  "weatherBias": "stormy"
+}

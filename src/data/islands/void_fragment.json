@@ -1,0 +1,28 @@
+{
+  "id": "void_fragment",
+  "name": "虚空碎片",
+  "description": "空间的裂痕在此地撕裂了现实，重力异常，迷雾中潜藏着不可名状的存在。",
+  "type": "void",
+  "mapWidth": 1024,
+  "mapHeight": 768,
+  "groundColor": { "fill": 1703932, "stroke": 65536, "strokeAlpha": 0.6 },
+  "skyColor": 197631,
+  "spawnPoint": { "x": 300, "y": 200 },
+  "airshipLanding": { "x": 500, "y": 600 },
+  "connections": ["ancient_ruins"],
+  "resources": [
+    { "type": "rock", "positions": [
+      { "x": 350, "y": 250 }, { "x": 550, "y": 300 }, { "x": 450, "y": 400 },
+      { "x": 600, "y": 500 }, { "x": 300, "y": 500 }
+    ]}
+  ],
+  "pois": [
+    { "id": "void_tear", "name": "虚空裂隙", "description": "一道撕裂空间的黑色裂隙，从中透出不属于这个世界的气息。", "x": 500, "y": 300, "type": "ruin" }
+  ],
+  "creatures": [
+    { "type": "forest_spider", "positions": [{ "x": 400, "y": 350 }, { "x": 550, "y": 450 }] },
+    { "type": "ancient_golem", "positions": [{ "x": 600, "y": 250 }] }
+  ],
+  "dangerLevel": 4,
+  "weatherBias": "stormy"
+}

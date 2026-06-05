@@ -1,0 +1,34 @@
+{
+  "id": "forge_island",
+  "name": "锻造之岛",
+  "description": "地火从裂缝中涌出，铁砧与熔炉的废墟诉说着曾经的工艺。",
+  "type": "mineral_vein",
+  "mapWidth": 1024,
+  "mapHeight": 768,
+  "groundColor": { "fill": 5891082, "stroke": 3774874, "strokeAlpha": 0.5 },
+  "skyColor": 67049,
+  "spawnPoint": { "x": 300, "y": 200 },
+  "airshipLanding": { "x": 800, "y": 600 },
+  "connections": ["mineral_ridge"],
+  "resources": [
+    { "type": "iron_ore", "positions": [
+      { "x": 350, "y": 250 }, { "x": 500, "y": 180 }, { "x": 650, "y": 300 },
+      { "x": 400, "y": 400 }, { "x": 700, "y": 500 }, { "x": 300, "y": 550 }
+    ]},
+    { "type": "rock", "positions": [
+      { "x": 250, "y": 200 }, { "x": 450, "y": 350 }, { "x": 600, "y": 450 },
+      { "x": 350, "y": 600 }, { "x": 550, "y": 650 }
+    ]}
+  ],
+  "pois": [
+    { "id": "forge_anvil", "name": "远古铁砧", "description": "刻满符文的巨大铁砧，依然散发着余温。", "x": 500, "y": 350, "type": "landmark" },
+    { "id": "forge_furnace", "name": "熔炉遗迹", "description": "残破的熔炉中仍有余火闪烁。", "x": 300, "y": 450, "type": "ruin" }
+  ],
+  "creatures": [
+    { "type": "ridge_wolf", "positions": [{ "x": 600, "y": 200 }, { "x": 350, "y": 500 }] },
+    { "type": "ancient_golem", "positions": [{ "x": 700, "y": 400 }] }
+  ],
+  "merchant": { "x": 250, "y": 300 },
+  "dangerLevel": 3,
+  "weatherBias": "sunny"
+}

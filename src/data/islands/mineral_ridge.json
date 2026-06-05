@@ -1,0 +1,36 @@
+{
+  "id": "mineral_ridge",
+  "name": "矿脉之脊",
+  "description": "裸露的岩层中蕴藏着丰富的矿物，但陡峭的地形充满危险。",
+  "type": "mineral_vein",
+  "mapWidth": 1280,
+  "mapHeight": 960,
+  "groundColor": { "fill": 4777870, "stroke": 3780723, "strokeAlpha": 0.4 },
+  "skyColor": 67049,
+  "spawnPoint": { "x": 400, "y": 300 },
+  "airshipLanding": { "x": 200, "y": 800 },
+  "connections": ["starter_forest", "ancient_ruins", "forge_island", "storm_peak"],
+  "resources": [
+    { "type": "rock", "positions": [
+      { "x": 200, "y": 200 }, { "x": 500, "y": 150 }, { "x": 700, "y": 250 },
+      { "x": 300, "y": 400 }, { "x": 600, "y": 350 }, { "x": 800, "y": 450 },
+      { "x": 250, "y": 550 }, { "x": 650, "y": 600 }, { "x": 400, "y": 700 },
+      { "x": 750, "y": 750 }, { "x": 350, "y": 850 }, { "x": 550, "y": 800 }
+    ]},
+    { "type": "iron_ore", "positions": [
+      { "x": 500, "y": 200 }, { "x": 700, "y": 300 }, { "x": 300, "y": 500 },
+      { "x": 600, "y": 650 }, { "x": 800, "y": 700 }
+    ]},
+    { "type": "tree", "positions": [
+      { "x": 200, "y": 300 }, { "x": 450, "y": 450 }, { "x": 700, "y": 550 }
+    ]}
+  ],
+  "pois": [
+    { "id": "mineral_cave", "name": "矿洞入口", "description": "深邃的矿洞中隐约传来敲击声。", "x": 650, "y": 350, "type": "resource_deposit" }
+  ],
+  "creatures": [
+    { "type": "ridge_wolf", "positions": [{ "x": 500, "y": 300 }, { "x": 700, "y": 600 }] }
+  ],
+  "dangerLevel": 2,
+  "weatherBias": "rainy"
+}

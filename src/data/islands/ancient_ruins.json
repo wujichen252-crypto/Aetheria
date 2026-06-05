@@ -1,0 +1,33 @@
+{
+  "id": "ancient_ruins",
+  "name": "遗迹回廊",
+  "description": "古代文明的残骸散布在紫灰色的土地上，隐藏着失落的知识。",
+  "type": "ruins",
+  "mapWidth": 1280,
+  "mapHeight": 960,
+  "groundColor": { "fill": 4037994, "stroke": 2902586, "strokeAlpha": 0.4 },
+  "skyColor": 67049,
+  "spawnPoint": { "x": 400, "y": 300 },
+  "airshipLanding": { "x": 1000, "y": 700 },
+  "connections": ["starter_forest", "mineral_ridge", "crystal_cave", "void_fragment"],
+  "resources": [
+    { "type": "rock", "positions": [
+      { "x": 300, "y": 200 }, { "x": 600, "y": 250 }, { "x": 500, "y": 400 },
+      { "x": 200, "y": 500 }, { "x": 700, "y": 600 }, { "x": 400, "y": 700 }
+    ]},
+    { "type": "tree", "positions": [
+      { "x": 200, "y": 150 }, { "x": 500, "y": 300 }, { "x": 300, "y": 450 },
+      { "x": 600, "y": 550 }, { "x": 350, "y": 650 }
+    ]}
+  ],
+  "pois": [
+    { "id": "ruins_gate", "name": "古城大门", "description": "巨大的石门上刻着复杂的星图。", "x": 600, "y": 200, "type": "landmark" },
+    { "id": "ruins_library", "name": "知识神殿", "description": "残破的书架上散落着古代文献的碎片。", "x": 350, "y": 550, "type": "ruin" }
+  ],
+  "creatures": [
+    { "type": "forest_spider", "positions": [{ "x": 400, "y": 350 }, { "x": 550, "y": 500 }] },
+    { "type": "ancient_golem", "positions": [{ "x": 700, "y": 300 }] }
+  ],
+  "dangerLevel": 2,
+  "weatherBias": "foggy"
+}

@@ -4,26 +4,29 @@ import { GameStateManager } from '../systems/GameState'
 import { getIslandDefinition } from '../world/IslandData'
 import { GameScene } from '../scenes/GameScene'
 import { getItemName } from '../world/ItemDefinitions'
+import { RouteGraph, RouteDefinition } from '../systems/RouteGraph'
 
 export class AirshipMenu {
   private scene: GameScene
   private container!: Phaser.GameObjects.Container
   private isOpen: boolean = false
-  private panelWidth: number = 400
+  private panelWidth: number = 420
   private destinationTexts: Phaser.GameObjects.Text[] = []
   private selectedIsland: string | null = null
   private fuelText!: Phaser.GameObjects.Text
   private titleText!: Phaser.GameObjects.Text
+  private routeGraph!: RouteGraph
 
   constructor(scene: GameScene) {
     this.scene = scene
+    this.routeGraph = RouteGraph.getInstance()
     this.createUI()
     this.setupInput()
   }
 
   private createUI(): void {
     const w = this.panelWidth
-    const h = 350
+    const h = 420
     const cx = GAME_CONFIG.width / 2
     const cy = GAME_CONFIG.height / 2
 
@@ -81,16 +84,41 @@ export class AirshipMenu {
     const currentName = currentIsland.name
     this.titleText.setText(`飞艇航行 — 当前: ${currentName}`)
 
-    // 列出可连接岛屿
-    let y = -80
-    currentIsland.connections.forEach(islandId => {
-      const island = getIslandDefinition(islandId)
-      const canTravel = gsm.data.airshipFuel >= GAME_CONFIG.airship.fuelCost
-      const color = canTravel ? '#e0e0e0' : '#666666'
-      const suffix = gsm.data.discoveredIslands.includes(islandId) ? '' : ' (未探索)'
+    // 获取当前岛屿的所有航线
+    const routes = this.routeGraph.getRoutesFrom(currentIsland.id)
+    let y = -130
 
-      const text = this.scene.add.text(-this.panelWidth / 2 + 30, y, `${island.name}${suffix}`, {
-        fontSize: '18px',
+    // 提示文本
+    const hint = this.scene.add.text(-this.panelWidth / 2 + 30, y, '可前往的岛屿:', {
+      fontSize: '14px',
+      color: '#666666',
+    })
+    hint.setScrollFactor(0)
+    hint.setDepth(201)
+    this.container.add(hint)
+    this.destinationTexts.push(hint)
+    y += 30
+
+    // 列出所有航线
+    for (const route of routes) {
+      // 确定目标岛屿ID（双向航线）
+      const targetId = route.from === gsm.data.currentIsland ? route.to : route.from
+      if (!getIslandDefinition(targetId)) continue
+
+      // 检查航线解锁条件
+      const isUnlocked = this.routeGraph.isRouteUnlocked(route.id)
+      const isHidden = route.hidden && !isUnlocked
+      if (isHidden) continue
+
+      const island = getIslandDefinition(targetId)
+      const fuelCost = route.fuelCost
+      const canTravel = gsm.data.airshipFuel >= fuelCost && isUnlocked
+      const color = canTravel ? '#e0e0e0' : (isUnlocked ? '#666666' : '#333333')
+      const suffix = gsm.data.discoveredIslands.includes(targetId) ? '' : ' (未探索)'
+      const lockSuffix = !isUnlocked ? ' [已锁定]' : ''
+
+      const text = this.scene.add.text(-this.panelWidth / 2 + 30, y, `${island.name}${suffix}${lockSuffix}`, {
+        fontSize: '17px',
         color: color,
       })
       text.setScrollFactor(0)
@@ -108,13 +136,22 @@ export class AirshipMenu {
         })
         .on('pointerdown', () => {
           if (canTravel) {
-            this.selectedIsland = islandId
-            this.confirmTravel()
+            this.selectedIsland = targetId
+            this.confirmTravel(route)
           }
         })
 
+      // 危险等级指示器
+      const dangerIndicator = this.scene.add.text(-this.panelWidth / 2 + 250, y, this.getDangerIcon(island.dangerLevel), {
+        fontSize: '16px',
+      })
+      dangerIndicator.setScrollFactor(0)
+      dangerIndicator.setDepth(201)
+      this.container.add(dangerIndicator)
+      this.destinationTexts.push(dangerIndicator)
+
       // 燃料消耗信息
-      const costText = this.scene.add.text(this.panelWidth / 2 - 80, y, `燃料: ${GAME_CONFIG.airship.fuelCost}`, {
+      const costText = this.scene.add.text(this.panelWidth / 2 - 80, y, `燃料: ${fuelCost}`, {
         fontSize: '14px',
         color: canTravel ? '#888888' : '#ff4444',
       })
@@ -124,7 +161,7 @@ export class AirshipMenu {
       this.destinationTexts.push(costText)
 
       y += 45
-    })
+    }
 
     // 补充燃料
     const biofuelCount = gsm.data.inventory.get('biofuel') ?? 0
@@ -160,11 +197,21 @@ export class AirshipMenu {
     this.destinationTexts.push(escText)
   }
 
-  private confirmTravel(): void {
+  private getDangerIcon(level: number): string {
+    switch (level) {
+      case 1: return '☆'
+      case 2: return '★'
+      case 3: return '★★'
+      case 4: return '★★★'
+      default: return '☆'
+    }
+  }
+
+  private confirmTravel(route: RouteDefinition): void {
     if (!this.selectedIsland) return
 
     const gsm = GameStateManager.getInstance()
-    gsm.data.airshipFuel -= GAME_CONFIG.airship.fuelCost
+    gsm.data.airshipFuel -= route.fuelCost
     this.close()
     this.scene.travelToIsland(this.selectedIsland)
   }

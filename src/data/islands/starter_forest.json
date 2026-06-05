@@ -1,0 +1,39 @@
+{
+  "id": "starter_forest",
+  "name": "翠风林地",
+  "description": "温和的森林岛屿，资源丰富，适合初航者。",
+  "type": "forest",
+  "mapWidth": 1280,
+  "mapHeight": 960,
+  "groundColor": { "fill": 470718, "stroke": 1708558, "strokeAlpha": 0.3 },
+  "skyColor": 67049,
+  "spawnPoint": { "x": 400, "y": 300 },
+  "airshipLanding": { "x": 1100, "y": 800 },
+  "connections": ["mineral_ridge", "ancient_ruins", "sky_garden"],
+  "resources": [
+    { "type": "tree", "positions": [
+      { "x": 200, "y": 200 }, { "x": 300, "y": 150 }, { "x": 500, "y": 250 },
+      { "x": 600, "y": 400 }, { "x": 150, "y": 400 }, { "x": 700, "y": 150 },
+      { "x": 800, "y": 300 }, { "x": 350, "y": 500 }, { "x": 550, "y": 600 },
+      { "x": 250, "y": 700 }, { "x": 650, "y": 750 }, { "x": 400, "y": 850 }
+    ]},
+    { "type": "berry_bush", "positions": [
+      { "x": 350, "y": 200 }, { "x": 500, "y": 450 }, { "x": 200, "y": 600 },
+      { "x": 700, "y": 550 }, { "x": 450, "y": 750 }
+    ]},
+    { "type": "rock", "positions": [
+      { "x": 400, "y": 200 }, { "x": 450, "y": 350 }, { "x": 250, "y": 300 },
+      { "x": 700, "y": 500 }, { "x": 500, "y": 150 }
+    ]}
+  ],
+  "pois": [
+    { "id": "forest_shrine", "name": "翠风祭坛", "description": "被藤蔓覆盖的古老祭坛，散发着微弱的魔法波动。", "x": 600, "y": 200, "type": "shrine" },
+    { "id": "forest_ruin", "name": "林间遗迹", "description": "倒塌的石柱间刻满符文，诉说着远古的故事。", "x": 300, "y": 650, "type": "ruin" }
+  ],
+  "creatures": [
+    { "type": "forest_rabbit", "positions": [{ "x": 500, "y": 200 }, { "x": 300, "y": 500 }] },
+    { "type": "forest_spider", "positions": [{ "x": 800, "y": 400 }, { "x": 600, "y": 700 }] }
+  ],
+  "dangerLevel": 1,
+  "weatherBias": "sunny"
+}

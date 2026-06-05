@@ -9,6 +9,8 @@ export interface PlayerData {
   currentIsland: string
   discoveredIslands: string[]
   discoveredPois: string[]
+  unlockedRoutes: string[]  // 已解锁的航线ID
+  completedDangerLevels: number[]  // 已完成的危险等级
   airshipFuel: number
   maxHp: number
   maxStamina: number
@@ -35,6 +37,8 @@ export class GameStateManager {
       currentIsland: 'starter_forest',
       discoveredIslands: ['starter_forest'],
       discoveredPois: [],
+      unlockedRoutes: [],
+      completedDangerLevels: [],
       airshipFuel: 50,
       maxHp: 100,
       maxStamina: 100,
@@ -96,6 +100,32 @@ export class GameStateManager {
     }
   }
 
+  // ---------- 航线解锁 ----------
+
+  /** 解锁航线 */
+  unlockRoute(routeId: string): void {
+    if (!this.data.unlockedRoutes.includes(routeId)) {
+      this.data.unlockedRoutes.push(routeId)
+    }
+  }
+
+  /** 检查航线是否已解锁 */
+  isRouteUnlocked(routeId: string): boolean {
+    return this.data.unlockedRoutes.includes(routeId)
+  }
+
+  /** 记录完成的危险等级 */
+  completeDangerLevel(level: number): void {
+    if (!this.data.completedDangerLevels.includes(level)) {
+      this.data.completedDangerLevels.push(level)
+    }
+  }
+
+  /** 检查是否完成过指定危险等级 */
+  hasCompletedDangerLevel(level: number): boolean {
+    return this.data.completedDangerLevels.some(l => l >= level)
+  }
+
   savePlayerState(hp: number, stamina: number, hunger: number): void {
     this.data.hp = hp
     this.data.stamina = stamina
@@ -117,6 +147,8 @@ export class GameStateManager {
       currentIsland: d.currentIsland,
       discoveredIslands: [...d.discoveredIslands],
       discoveredPois: [...d.discoveredPois],
+      unlockedRoutes: [...d.unlockedRoutes],
+      completedDangerLevels: [...d.completedDangerLevels],
       airshipFuel: d.airshipFuel,
       maxHp: d.maxHp,
       maxStamina: d.maxStamina,
@@ -136,6 +168,8 @@ export class GameStateManager {
       currentIsland: slot.currentIsland,
       discoveredIslands: [...slot.discoveredIslands],
       discoveredPois: [...slot.discoveredPois],
+      unlockedRoutes: slot.unlockedRoutes ? [...slot.unlockedRoutes] : [],
+      completedDangerLevels: slot.completedDangerLevels ? [...slot.completedDangerLevels] : [],
       airshipFuel: slot.airshipFuel,
       maxHp: slot.maxHp,
       maxStamina: slot.maxStamina,
